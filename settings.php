@@ -24,7 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    get_string_manager()->reset_caches();
+    //get_string_manager()->reset_caches();
 
     $settings = new admin_settingpage(
         'local_campaign_settings',
