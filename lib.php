@@ -13,11 +13,9 @@ function local_campaign_before_http_headers()
 
     if (array_key_exists('campaign', $_GET)) {
         $campaign = $_GET['campaign'];
-        $expires = 1 * 30 * 24 * 3600; // TODO: plugin config ?
-        setcookie('local_campaign', $campaign, time() + $expires, '/');
-    } elseif (!empty($_COOKIE['local_campaign'])) {
-        $campaign = $_COOKIE['local_campaign'];
-        setcookie('local_campaign', '', time() - 3600, '/');
+        $SESSION->local_campaign = $campaign;
+    } elseif (!empty($SESSION->local_campaign)) {
+        $campaign = $SESSION->local_campaign;
     }
 
     if (isloggedin() && !empty($campaign)) {
