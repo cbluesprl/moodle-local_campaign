@@ -25,3 +25,4 @@ $string['pluginname'] = 'Campaigns';
 $string['campaigns_setting_name'] = 'Campaign';
 $string['campaigns_setting_description'] = 'A campaign is a keyword without special characters or spaces. Enter one campaign per line.';
 $string['campaigns_setting_validation_error'] = 'Campaigns must be only keyword without special characters.';
+$string['privacy:metadata'] = 'Campaings plugin does not store any personal data.';
