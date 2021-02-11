@@ -41,14 +41,14 @@ function local_campaign_before_http_headers() {
 
     if (!isloggedin()) {
         if ($campaign) {
-            $SESSION->local_campaign = required_param('campaign', PARAM_ALPHANUM);
+            $SESSION->local_campaign = $campaign;
         }
 
         return true;
     }
 
     if (!empty($SESSION->local_campaign)) {
-        $_GET['campaign'] = $SESSION->local_campaign;
+        $campaign = $SESSION->local_campaign;
         unset($SESSION->local_campaign);
     }
     if (!$campaign) {
@@ -59,8 +59,8 @@ function local_campaign_before_http_headers() {
     $profile_campaigns = !empty($profile->campaigns) ? array_map('trim', explode(',', $profile->campaigns)) : [];
     $config_campaigns = local_campaign_split_lines(get_config('local_campaign', 'campaigns'));
 
-    if (!in_array($_GET['campaign'], $profile_campaigns) && in_array($_GET['campaign'], $config_campaigns)) {
-        $profile_campaigns[] = $_GET['campaign'];
+    if (!in_array($campaign, $profile_campaigns) && in_array($campaign, $config_campaigns)) {
+        $profile_campaigns[] = $campaign;
         $field = $DB->get_record('user_info_field', ['shortname' => 'campaigns']);
 
         $conditions = ['userid' => $USER->id, 'fieldid' => $field->id];
