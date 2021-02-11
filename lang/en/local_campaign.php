@@ -21,10 +21,7 @@
  * @package   local_campaign
  */
 
-$string['pluginname'] = 'Campaign';
-$string['user_info_category_name'] = 'Campaign';
-$string['user_info_field_name'] = 'Campaign';
-$string['user_info_field_description'] = '';
+$string['pluginname'] = 'Campaigns';
 $string['campaigns_setting_name'] = 'Campaign';
-$string['campaigns_setting_description'] = 'A campaign is a keyword without special characters or spaces. Enter 1 campaign per line.';
+$string['campaigns_setting_description'] = 'A campaign is a keyword without special characters or spaces. Enter one campaign per line.';
 $string['campaigns_setting_validation_error'] = 'Campaigns must be only keyword without special characters.';
