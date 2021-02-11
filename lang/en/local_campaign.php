@@ -22,6 +22,7 @@
  */
 
 $string['pluginname'] = 'Campaign';
+$string['user_info_category_name'] = 'Campaign';
 $string['user_info_field_name'] = 'Campaign';
 $string['user_info_field_description'] = '';
 $string['campaigns_setting_name'] = 'Campaign';

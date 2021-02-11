@@ -1,47 +1,80 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-function local_campaign_split_lines($data)
-{
+/**
+ * @author    sreynders@cblue.be
+ * @copyright CBlue SPRL, support@cblue.be
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   local_campaign
+ */
+
+/**
+ * @param $data
+ * @return array|false|string[]
+ */
+function local_campaign_split_lines($data) {
     return preg_split('/(\r\n|\n|\r)/', $data);
 }
 
-function local_campaign_before_http_headers()
-{
+/**
+ * @throws dml_exception
+ */
+function local_campaign_before_http_headers() {
     global $DB, $SESSION, $USER;
 
-    $campaign = null;
+    if (!isloggedin()) {
+        if (array_key_exists('campaign', $_GET)) {
+            $SESSION->local_campaign = $_GET['campaign'];
+        }
 
-    if (array_key_exists('campaign', $_GET)) {
-        $campaign = $_GET['campaign'];
-        $SESSION->local_campaign = $campaign;
-    } elseif (!empty($SESSION->local_campaign)) {
-        $campaign = $SESSION->local_campaign;
+        return true;
     }
 
-    if (isloggedin() && !empty($campaign)) {
-        $profile = profile_user_record($USER->id);
-        $profile_campaigns = !empty($profile->campaigns) ? array_map('trim', explode(',', $profile->campaigns)) : [];
-        $config_campaigns = local_campaign_split_lines(get_config('local_campaign', 'campaigns'));
+    if (!empty($SESSION->local_campaign)) {
+        $_GET['campaign'] = $SESSION->local_campaign;
+        unset($SESSION->local_campaign);
+    }
+    if (!array_key_exists('campaign', $_GET)) {
+        return true;
+    }
 
-        if (!in_array($campaign, $profile_campaigns) && in_array($campaign, $config_campaigns)) {
-            $profile_campaigns[] = $campaign;
-            $field = $DB->get_record('user_info_field', ['shortname' => 'campaigns']);
+    $profile = profile_user_record($USER->id);
+    $profile_campaigns = !empty($profile->campaigns) ? array_map('trim', explode(',', $profile->campaigns)) : [];
+    $config_campaigns = local_campaign_split_lines(get_config('local_campaign', 'campaigns'));
 
-            $conditions = ['userid' => $USER->id, 'fieldid' => $field->id];
-            $user_info_data = $DB->get_record('user_info_data', $conditions);
-            $data = implode(',', $profile_campaigns);
+    if (!in_array($_GET['campaign'], $profile_campaigns) && in_array($_GET['campaign'], $config_campaigns)) {
+        $profile_campaigns[] = $_GET['campaign'];
+        $field = $DB->get_record('user_info_field', ['shortname' => 'campaigns']);
 
-            $dataobject = new stdClass();
-            $dataobject->userid = $USER->id;
-            $dataobject->fieldid = $field->id;
-            $dataobject->data = $data;
+        $conditions = ['userid' => $USER->id, 'fieldid' => $field->id];
+        $user_info_data = $DB->get_record('user_info_data', $conditions);
+        $data = implode(',', $profile_campaigns);
 
-            if ($user_info_data) {
-                $dataobject->id = $user_info_data->id;
-                $DB->update_record('user_info_data', $dataobject, $conditions);
-            } else {
-                $DB->insert_record('user_info_data', $dataobject);
-            }
+        $dataobject = new stdClass();
+        $dataobject->userid = $USER->id;
+        $dataobject->fieldid = $field->id;
+        $dataobject->data = $data;
+
+        if ($user_info_data) {
+            $dataobject->id = $user_info_data->id;
+            $DB->update_record('user_info_data', $dataobject, $conditions);
+        } else {
+            $DB->insert_record('user_info_data', $dataobject);
         }
     }
+
+    return true;
 }

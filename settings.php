@@ -24,7 +24,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    //get_string_manager()->reset_caches();
 
     $settings = new admin_settingpage(
         'local_campaign_settings',
@@ -34,12 +33,13 @@ if ($hassiteconfig) {
 
     $ADMIN->add('localplugins', $settings);
 
-    //$settings->add(new admin_setting_configtextarea(
-    $settings->add(new \local_campaign\local_campaign_admin_setting_configtextarea(
-        'local_campaign/campaigns',
-        get_string('campaigns_setting_name', 'local_campaign'),
-        get_string('campaigns_setting_description', 'local_campaign'),
-        null,
-        PARAM_TEXT
-    ));
+    $settings->add(
+        new \local_campaign\local_campaign_admin_setting_configtextarea(
+            'local_campaign/campaigns',
+            get_string('campaigns_setting_name', 'local_campaign'),
+            get_string('campaigns_setting_description', 'local_campaign'),
+            null,
+            PARAM_TEXT
+        )
+    );
 }
