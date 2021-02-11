@@ -26,3 +26,5 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'local_campaign';
 $plugin->version = 2021012000;
 $plugin->requires = 2020061500; // Moodle 3.9
+$plugin->maturity = MATURITY_STABLE;
+$plugin->release = 'v1';
