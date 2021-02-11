@@ -25,8 +25,7 @@ namespace local_campaign;
 
 require_once $CFG->dirroot . '/local/campaign/lib.php';
 
-class local_campaign_admin_setting_configtextarea extends \admin_setting_configtextarea
-{
+class local_campaign_admin_setting_configtextarea extends \admin_setting_configtextarea {
 
     /**
      * @param $data
@@ -79,7 +78,10 @@ class local_campaign_admin_setting_configtextarea extends \admin_setting_configt
         foreach ($sanitized_old_values as $ov) {
             if (!in_array($ov, $sanitized_values)) { // Old value not in new value, remove it
                 // Get all user_info_data with this campaign removed
-                $rs = $DB->get_recordset_sql("SELECT * FROM {user_info_data} WHERE fieldid = $field->id AND data LIKE '%$ov%'"); //$ov is safe
+                $rs = $DB->get_recordset_sql(
+                    "SELECT * FROM {user_info_data} WHERE fieldid = $field->id AND " . $DB->sql_like('data', ':data', false, false),
+                    ['data' => "%$ov%"]
+                );
                 foreach ($rs as $r) {
                     // Clean data and remove campaign
                     $data = [];
