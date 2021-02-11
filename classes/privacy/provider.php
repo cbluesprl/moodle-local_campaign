@@ -21,7 +21,7 @@
  * @package   local_campaign
  */
 
-namespace enrol_shared\privacy;
+namespace local_campaign\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 
