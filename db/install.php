@@ -34,7 +34,7 @@ function xmldb_local_campaign_install() {
     // Insert user_info_category
     $category = new stdClass();
     $category->name = 'Campaigns';
-    $category->sortorder = (int) $DB->get_record_sql('SELECT (IFNULL(MAX(sortorder), 0) + 1) AS sortorder FROM {user_info_category}')->sortorder;
+    $category->sortorder = (int) $DB->get_record_sql('SELECT COUNT(*) + 1 AS sortorder FROM {user_info_category}')->sortorder;
     $category->id = $DB->insert_record('user_info_category', $category);
 
     // Insert user_info_field

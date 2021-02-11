@@ -25,7 +25,7 @@ namespace local_campaign;
 
 require_once $CFG->dirroot . '/local/campaign/lib.php';
 
-class local_campaign_admin_setting_configtextarea extends \admin_setting_configtextarea {
+class admin_setting_campaigns extends \admin_setting_configtextarea {
 
     /**
      * @param $data

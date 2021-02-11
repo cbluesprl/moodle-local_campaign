@@ -34,7 +34,7 @@ if ($hassiteconfig) {
     $ADMIN->add('localplugins', $settings);
 
     $settings->add(
-        new \local_campaign\local_campaign_admin_setting_configtextarea(
+        new \local_campaign\admin_setting_campaigns(
             'local_campaign/campaigns',
             get_string('campaigns_setting_name', 'local_campaign'),
             get_string('campaigns_setting_description', 'local_campaign'),

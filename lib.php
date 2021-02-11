@@ -30,14 +30,18 @@ function local_campaign_split_lines($data) {
 }
 
 /**
+ * @return bool
+ * @throws coding_exception
  * @throws dml_exception
  */
 function local_campaign_before_http_headers() {
     global $DB, $SESSION, $USER;
 
+    $campaign = optional_param('campaign', false, PARAM_ALPHANUM);
+
     if (!isloggedin()) {
-        if (array_key_exists('campaign', $_GET)) {
-            $SESSION->local_campaign = $_GET['campaign'];
+        if ($campaign) {
+            $SESSION->local_campaign = required_param('campaign', PARAM_ALPHANUM);
         }
 
         return true;
@@ -47,7 +51,7 @@ function local_campaign_before_http_headers() {
         $_GET['campaign'] = $SESSION->local_campaign;
         unset($SESSION->local_campaign);
     }
-    if (!array_key_exists('campaign', $_GET)) {
+    if (!$campaign) {
         return true;
     }
 
